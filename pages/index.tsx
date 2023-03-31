@@ -71,13 +71,13 @@ export default function Home () {
         <GreenLightDurationForm/>
         <br/><br/>
         {greenLightDuration > 0 && (
-          <div ref={ref}>
+          <div ref={ref} className={styles.row}>
             <div className={styles.header}>
               <div>Mevcut Adım: {step}</div>
               <div>Sonraki adıma kalan süre: {duration / 1000}</div>
             </div>
 
-            <div className={styles.row}>
+            <div>
               <div>
                 Group1 => <Light color={group1} />
               </div>
