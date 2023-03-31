@@ -1,0 +1,1 @@
+export const greenLightInputRegex = /^\b([1-9]|[12][0-9]|30)\b$/

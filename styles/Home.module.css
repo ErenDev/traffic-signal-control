@@ -1,0 +1,14 @@
+.main {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.row {
+  margin-bottom: 30px
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
