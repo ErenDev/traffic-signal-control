@@ -1,60 +1,67 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styles from '@/styles/Home.module.css'
 import GreenLightDurationForm from '@/components/GreenLightDurationForm'
-import { useFormContext } from '@/context/form'
-import { lightData } from '@/utils/lightData'
 import Light from '@/components/Light'
+import { lightData } from '@/utils/lightData'
+import { useFormContext } from '@/context/form'
 
 export default function Home () {
-  const ref = useRef(null)
-  const { greenLightDuration, setGreenLightDuration } = useFormContext()
-  const [step, setStep] = useState(0)
-  const [cycle, setCycle] = useState(0)
-  const [group1, setGroup1] = useState()
-  const [group2, setGroup2] = useState()
+  const { greenLightDuration } = useFormContext()
+  const [initialized, setInitialized] = useState(false)
+  const [step, setStep] = useState<number>()
+  const [cycle, setCycle] = useState<number>(0)
   const [duration, setDuration] = useState<number>(0)
+  const [group1, setGroup1] = useState<string>('K')
+  const [group2, setGroup2] = useState<string>('K')
+  const [group3, setGroup3] = useState<string>('K')
 
-  const stopCycle = async () => {
-    await new Promise((resolve, reject) => {
-      setGreenLightDuration(0)
-      setDuration(0)
-      setStep(0)
-      setCycle(0)
-      setGroup1(null)
-      setGroup2(null)
-      resolve('R')
-    })
+  let interval = null
+  let timeout = null
+  let p = null
+
+  const handleButton = () => {
+    setInitialized(false)
+    setCycle(0)
+    setDuration(0)
+    setGroup1('K')
+    setGroup2('K')
+    setGroup3('Y')
+
+    return false
   }
 
   const startCycle = async () => {
-    const lightObjArr = lightData(greenLightDuration)
-    setGroup1(lightObjArr[0].current.group1)
-    setGroup2(lightObjArr[0].current.group2)
+    setInitialized(true)
+    console.log('cycle started')
+    if (initialized) {
+      const data = lightData(greenLightDuration)
+      for await (const item of data) {
+        setDuration(item.duration)
+        p = await new Promise((resolve, reject) => {
+          setStep(item.step)
 
-    for (const item of lightObjArr) {
-      setDuration(item.duration)
-      await new Promise((resolve, reject) => {
-        setStep(item.step)
-        setTimeout(() => {
-          if (item.step === lightObjArr.length) {
-            setCycle(cycle + 1)
-          }
-          setGroup1(item.next.group1)
-          setGroup2(item.next.group2)
-          resolve(item)
-        }, item.duration + 1000)
-      })
+          setGroup1(item.current.group1)
+          setGroup2(item.current.group2)
+
+          timeout = setTimeout(() => {
+            if (item.step === data.length) {
+              setCycle(cycle + 1)
+            }
+
+            setGroup1(item.next.group1)
+            setGroup2(item.next.group2)
+            setDuration(0)
+            resolve(item)
+          }, item.duration + 1000)
+        })
+
+        p = null
+      }
     }
   }
 
   useEffect(() => {
-    if (greenLightDuration > 0) {
-      startCycle()
-    }
-  }, [greenLightDuration, cycle])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       if (duration > 0) {
         setDuration(() => duration - 1000)
       }
@@ -63,30 +70,41 @@ export default function Home () {
     return () => {
       clearInterval(interval)
     }
-  }, [duration])
+  }, [initialized, duration])
+
+  useEffect(() => {
+    if (greenLightDuration) {
+      startCycle()
+    }
+  }, [greenLightDuration, initialized, cycle])
 
   return (
     <>
       <main className={styles.main}>
         <GreenLightDurationForm/>
         <br/><br/>
-        {greenLightDuration > 0 && (
-          <div ref={ref} className={styles.row}>
-            <div className={styles.header}>
-              <div>Mevcut Adım: {step}</div>
-              <div>Sonraki adıma kalan süre: {duration / 1000}</div>
+        <button onClick={handleButton}>Yaya Butonu</button>
+        <br/><br/>
+
+        <div className={styles.row}>
+          <div className={styles.header}>
+            <div>Mevcut Adım: {step}</div>
+            <div>Sonraki adıma kalan süre: {duration / 1000}</div>
+          </div>
+
+          <div className={styles.lightContainer}>
+            <div className={styles.lightItem}>
+              <Light color={group1} groupName={'Gr1'} />
+            </div>
+            <div className={styles.lightItem}>
+              <Light color={group2} groupName={'Gr2'} />
             </div>
 
-            <div>
-              <div>
-                Group1 => <Light color={group1} />
-              </div>
-              <div>
-                Group2 => <Light color={group2} />
-              </div>
+            <div className={styles.lightItem}>
+              <Light color={group3} groupName={'Yaya Grubu'} />
             </div>
           </div>
-        )}
+        </div>
       </main>
     </>
   )
