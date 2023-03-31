@@ -33,30 +33,28 @@ export default function Home () {
   const startCycle = async () => {
     setInitialized(true)
     console.log('cycle started')
-    if (initialized) {
-      const data = lightData(greenLightDuration)
-      for await (const item of data) {
-        setDuration(item.duration)
-        p = await new Promise((resolve, reject) => {
-          setStep(item.step)
+    const data = lightData(greenLightDuration)
+    for await (const item of data) {
+      setDuration(item.duration)
+      p = await new Promise((resolve, reject) => {
+        setStep(item.step)
 
-          setGroup1(item.current.group1)
-          setGroup2(item.current.group2)
+        setGroup1(item.current.group1)
+        setGroup2(item.current.group2)
 
-          timeout = setTimeout(() => {
-            if (item.step === data.length) {
-              setCycle(cycle + 1)
-            }
+        timeout = setTimeout(() => {
+          if (item.step === data.length) {
+            setCycle(cycle + 1)
+          }
 
-            setGroup1(item.next.group1)
-            setGroup2(item.next.group2)
-            setDuration(0)
-            resolve(item)
-          }, item.duration + 1000)
-        })
+          setGroup1(item.next.group1)
+          setGroup2(item.next.group2)
+          setDuration(0)
+          resolve(item)
+        }, item.duration + 1000)
+      })
 
-        p = null
-      }
+      p = null
     }
   }
 

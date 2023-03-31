@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01a310e5-f42f-4435-8d50-47bed3dc7e5c" name="Changes" comment="dev wip">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/GreenLightDurationForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/GreenLightDurationForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +64,7 @@
       <option name="presentableId" value="Default" />
       <updated>1680170012357</updated>
       <workItem from="1680170013491" duration="50494000" />
-      <workItem from="1680242446136" duration="14270000" />
+      <workItem from="1680242446136" duration="14758000" />
     </task>
     <task id="LOCAL-00001" summary="remove .idea">
       <created>1680241222832</created>
