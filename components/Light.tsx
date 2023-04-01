@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 
 const Light = ({ color, groupName }) => {
   const colorMap = { K: 'red', Y: 'green', S: 'orange' }
@@ -7,15 +6,14 @@ const Light = ({ color, groupName }) => {
   return (
     <>
       <div>
-        <Image
+        <img
           src={`/${color}.png`}
-          width='64'
-          height='220'
+          width='90'
+          height='300'
           alt={'traffic light icon'}
         />
+        <h2 style={{ color: colorMap[color]}}>{groupName}</h2>
       </div>
-
-      <span style={{ color: colorMap[color]}}>{groupName}</span>
     </>
   )
 }

@@ -4,7 +4,12 @@
 }
 
 .row {
+  margin-bottom: 20px;
+}
 
+.spaceBetween {
+  display: flex;
+  justify-content: space-between;
 }
 
 .header {
